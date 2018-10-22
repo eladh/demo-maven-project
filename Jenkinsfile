@@ -34,13 +34,7 @@ node {
         rtMaven.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
     }
 
-   stage('Xray Scan') {
-      def scanResult = server.xrayScan scanConfig
-      print scanResult
-      if(FAIL_ON_XRAY.toBoolean() && scanResult.foundVulnerable) {
-        error("Build failed because ${scanResult.scanMassege}")
-    }
-  }
+
 
     stage ('Deploy') {
         rtMaven.deployer.deployArtifacts buildInfo
@@ -49,4 +43,14 @@ node {
     stage ('Publish build info') {
         server.publishBuildInfo buildInfo
     }
+
+     stage('Xray Scan') {
+          def scanResult = server.xrayScan scanConfig
+          print scanResult
+          if(FAIL_ON_XRAY.toBoolean() && scanResult.foundVulnerable) {
+            error("Build failed because ${scanResult.scanMassege}")
+        }
+      }
+
+
 }

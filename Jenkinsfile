@@ -2,6 +2,7 @@ node {
     def server
     def buildInfo
     def rtMaven
+    def scanConfig
 
     stage ('Build') {
         git url: 'https://github.com/eladh/demo-maven-project.git'
@@ -17,6 +18,12 @@ node {
         rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
 
         buildInfo = Artifactory.newBuildInfo()
+
+        scanConfig = [
+                'buildName'      : buildInfo.name,
+                'buildNumber'    : buildInfo.number,
+                'failBuild'      : false
+              ]
     }
 
     stage ('Test') {

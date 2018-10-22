@@ -28,16 +28,12 @@ node {
     }
 
    stage('Xray Scan') {
-      steps {
-        script {
-          scanResult = rtServer.xrayScan scanConfig
-          print scanResult
-          if(FAIL_ON_XRAY.toBoolean() && scanResult.foundVulnerable) {
-            error("Build failed because ${scanResult.scanMassege}")
-          }
-        }
-      }
+      scanResult = rtServer.xrayScan scanConfig
+      print scanResult
+      if(FAIL_ON_XRAY.toBoolean() && scanResult.foundVulnerable) {
+        error("Build failed because ${scanResult.scanMassege}")
     }
+  }
 
     stage ('Deploy') {
         rtMaven.deployer.deployArtifacts buildInfo

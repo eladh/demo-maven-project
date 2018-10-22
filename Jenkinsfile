@@ -28,7 +28,7 @@ node {
     }
 
    stage('Xray Scan') {
-      scanResult = rtServer.xrayScan scanConfig
+      def scanResult = server.xrayScan scanConfig
       print scanResult
       if(FAIL_ON_XRAY.toBoolean() && scanResult.foundVulnerable) {
         error("Build failed because ${scanResult.scanMassege}")
